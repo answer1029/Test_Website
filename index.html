@@ -6,13 +6,15 @@
   <title>밤과 낮 전환</title>
   <style>
     body {
-      transition: background 0.5s, color 0.5s;
+      margin: 0;
+      overflow: hidden;
       font-family: Arial, sans-serif;
+      transition: background 0.5s, color 0.5s;
     }
 
     /* 기본 낮 스타일 */
     .day {
-      background-color: #f0f8ff;
+      background-color: #87cefa;
       color: #000;
     }
 
@@ -20,6 +22,78 @@
     .night {
       background-color: #2f2f2f;
       color: #fff;
+    }
+
+    /* 해, 달, 구름 */
+    .sun, .moon {
+      position: absolute;
+      border-radius: 50%;
+      transition: all 1s ease-in-out;
+    }
+
+    .sun {
+      background-color: #ffeb3b;
+      width: 200px;
+      height: 200px;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .moon {
+      background-color: #f0f8ff;
+      width: 150px;
+      height: 150px;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+    }
+
+    .cloud {
+      position: absolute;
+      background-color: #fff;
+      border-radius: 50%;
+      width: 200px;
+      height: 100px;
+      opacity: 0.7;
+      animation: cloudMove 15s linear infinite;
+    }
+
+    .cloud:nth-child(1) {
+      top: 10%;
+      left: 10%;
+    }
+
+    .cloud:nth-child(2) {
+      top: 20%;
+      left: 60%;
+    }
+
+    .cloud:nth-child(3) {
+      top: 30%;
+      left: 30%;
+    }
+
+    @keyframes cloudMove {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* 별 */
+    .star {
+      position: absolute;
+      background-color: #fff;
+      border-radius: 50%;
+      width: 5px;
+      height: 5px;
+      opacity: 0.8;
+      animation: twinkle 1.5s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.8; }
+      100% { opacity: 1; }
     }
 
     /* 스위치 스타일 */
@@ -69,6 +143,7 @@
       left: 25px;
     }
 
+    /* 부유하는 원 */
     .floating-element {
       position: absolute;
       bottom: 10%;
@@ -104,19 +179,45 @@
     <span class="switch-label">낮/밤 전환</span>
   </div>
 
+  <div class="sun"></div>
+  <div class="moon"></div>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+
   <div class="floating-element"></div>
 
   <script>
     const toggleSwitch = document.getElementById('toggleSwitch');
     const body = document.body;
+    const sun = document.querySelector('.sun');
+    const moon = document.querySelector('.moon');
+    const clouds = document.querySelectorAll('.cloud');
+
+    // 별 랜덤 배치
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.top = `${Math.random() * 100}vh`;
+      star.style.left = `${Math.random() * 100}vw`;
+      star.style.animationDuration = `${Math.random() * 2 + 1}s`;
+      document.body.appendChild(star);
+    }
 
     toggleSwitch.addEventListener('change', () => {
       if (toggleSwitch.checked) {
         body.classList.remove('day');
         body.classList.add('night');
+        sun.style.transform = 'translateX(-50%) translateY(100%)';
+        moon.style.display = 'block';
+        moon.style.transform = 'translateX(-50%) translateY(0)';
+        clouds.forEach(cloud => cloud.style.animationDuration = '20s');
       } else {
         body.classList.remove('night');
         body.classList.add('day');
+        sun.style.transform = 'translateX(-50%) translateY(0)';
+        moon.style.display = 'none';
+        clouds.forEach(cloud => cloud.style.animationDuration = '15s');
       }
     });
   </script>
