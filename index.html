@@ -1,121 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Switch Example</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>밤과 낮 전환</title>
   <style>
     body {
-      margin: 0;
-      height: 100vh;
+      transition: background 0.5s, color 0.5s;
+      font-family: Arial, sans-serif;
+    }
+
+    /* 기본 낮 스타일 */
+    .day {
+      background-color: #f0f8ff;
+      color: #000;
+    }
+
+    /* 밤 스타일 */
+    .night {
+      background-color: #2f2f2f;
+      color: #fff;
+    }
+
+    /* 스위치 스타일 */
+    .switch-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #d4fc79, #96e6a1);
-      font-family: 'Segoe UI', sans-serif;
-      transition: background 0.6s ease;
     }
 
-    .card {
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      transition: background 0.5s ease, transform 0.3s ease-in-out;
-    }
-
-    .card.animate {
-      transform: scale(1.1);
-    }
-
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 80px;
-      height: 40px;
+    .switch-label {
+      margin-left: 10px;
+      font-size: 1.2em;
     }
 
     .switch input {
-      display: none;
-    }
-
-    .slider {
-      position: absolute;
+      width: 50px;
+      height: 25px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #ccc;
+      border-radius: 50px;
+      position: relative;
       cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      border-radius: 40px;
-      transition: 0.4s;
+      transition: 0.3s;
     }
 
-    .slider:before {
-      content: "";
+    .switch input:checked {
+      background: #4caf50;
+    }
+
+    .switch input:before {
+      content: '';
       position: absolute;
-      height: 32px;
-      width: 32px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
+      top: 50%;
+      left: 5px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      transition: 0.4s;
+      background: white;
+      transition: 0.3s;
+      transform: translateY(-50%);
     }
 
-    input:checked + .slider {
-      background-color: #4cd137;
+    .switch input:checked:before {
+      left: 25px;
     }
 
-    input:checked + .slider:before {
-      transform: translateX(40px);
+    .floating-element {
+      position: absolute;
+      bottom: 10%;
+      left: 10%;
+      width: 100px;
+      height: 100px;
+      background-color: #ff6347;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      animation: float 3s ease-in-out infinite;
     }
 
-    .status {
-      margin-top: 20px;
-      font-size: 24px;
-      font-weight: bold;
-      color: #fff;
-      transition: color 0.3s;
-    }
-
-    .dark-mode {
-      background: linear-gradient(135deg, #1e1e2f, #3a3a52);
-    }
-
-    .dark-mode .status {
-      color: #fffae5;
+    @keyframes float {
+      0% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+      100% {
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
-<body>
-  <div class="card">
+<body class="day">
+
+  <div class="switch-container">
     <label class="switch">
-      <input type="checkbox" id="toggle" />
+      <input type="checkbox" id="toggleSwitch">
       <span class="slider"></span>
     </label>
-    <div class="status" id="status">OFF</div>
+    <span class="switch-label">낮/밤 전환</span>
   </div>
 
-  <script>
-    const toggle = document.getElementById("toggle");
-    const statusText = document.getElementById("status");
-    const body = document.body;
-    const card = document.querySelector(".card");
+  <div class="floating-element"></div>
 
-    toggle.addEventListener("change", () => {
-      if (toggle.checked) {
-        statusText.textContent = "ON";
-        body.classList.add("dark-mode");
-        card.classList.add("animate");
+  <script>
+    const toggleSwitch = document.getElementById('toggleSwitch');
+    const body = document.body;
+
+    toggleSwitch.addEventListener('change', () => {
+      if (toggleSwitch.checked) {
+        body.classList.remove('day');
+        body.classList.add('night');
       } else {
-        statusText.textContent = "OFF";
-        body.classList.remove("dark-mode");
-        card.classList.remove("animate");
+        body.classList.remove('night');
+        body.classList.add('day');
       }
     });
   </script>
+
 </body>
 </html>
